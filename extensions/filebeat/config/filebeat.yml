@@ -1,0 +1,67 @@
+## Filebeat configuration
+## https://github.com/elastic/beats/blob/main/deploy/docker/filebeat.docker.yml
+name: filebeat
+
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+# FOR GETTING THE LOGS FROM CONTAINERS
+# filebeat.autodiscover:
+#   providers:
+#     # The Docker autodiscover provider automatically retrieves logs from Docker
+#     # containers as they start and stop.
+#     - type: docker
+#       # set to true to get the logs from all containers
+#       hints.enabled: false
+#       hints.default_config:
+#         type: container
+#         paths:
+#           - /var/lib/docker/containers/${data.container.id}/*-json.log
+#       templates:
+#         - condition:
+#             contains:
+#               docker.container.name: book-nginx
+#           config:
+#             - type: container
+#               paths:
+#                 - /var/lib/docker/containers/${data.container.id}/*.log
+
+# FOR GETTING LOGS FROM FILES
+# MAKE SURE THE LOGS IN ACCESS.LOG ARE PRPOERLY MOUNTED in filebeat-compose.yml
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/nginx/access.log # Ingests the main access log
+      - /var/log/nginx/access.log.* # Ingests rotated access logs (e.g., access.log.1, access.log.2.gz)
+
+processors:
+  - add_cloud_metadata: ~
+  - drop_fields: # drop unnecessatry fields
+      fields: ["docker.container.image", "docker.container.id", "docker.container.labels", "agent", "ecs", "host", "input", "tags"]
+
+monitoring:
+  enabled: false
+  elasticsearch:
+    hosts: ["elasticsearch:9200"]
+    username: beats_system
+    password: ${BEATS_SYSTEM_PASSWORD}
+
+logging:
+  level: info
+  selectors: ["*"]
+
+# MY CHANGE
+output.logstash:
+  hosts: ["logstash:5044"]
+  username: filebeat_internal
+  password: ${FILEBEAT_INTERNAL_PASSWORD}
+
+## HTTP endpoint for health checking
+## https://www.elastic.co/guide/en/beats/filebeat/current/http-endpoint.html
+
+http:
+  enabled: true
+  host: 0.0.0.0
