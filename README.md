@@ -14,12 +14,12 @@ docker compose -f elk-compose.yml up setup
 docker compose -f elk-compose.yml -f extensions/filebeat/filebeat-compose.yml up -d
 ```
 
-4. to stop all the containers:
+4. access the kibana visualization tool at localhost:5601
+
+5. to stop all the containers:
 ```
 docker compose -f elk-compose.yml -f extensions/filebeat/filebeat-compose.yml down
 ```
-
-5. access the kibana visualization tool at localhost:5601
 
 # Deployment issue
 The same setup needs to be deployed on mude-utilities.citg.tudelft.nl server.
