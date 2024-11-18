@@ -13,7 +13,7 @@ In brief, this is how the following components work:
 4. Elasticsearch stores and indexes the logs.
 5. Kibana visualizes the indexed data as dashboards, enabling monitoring and analysis.
 
-## Running server-logging setup locally
+# Running server-logging setup locally
 
 Before running the docker containers locally, you have to populate the the directory `nginx/logs` with the log files.
 
