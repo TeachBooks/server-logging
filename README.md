@@ -1,6 +1,6 @@
 # server-logging
 
-The server-logging setup uses the elk stack tool for ingesting logs and visualising the logs. The elk stack tool consists of the following components:
+The server-logging setup uses the ELK stack tool for ingesting logs and visualising the logs. The ELK stack tool consists of the following components:
 1. elasticsearch
 2. kibana
 3. logstash
