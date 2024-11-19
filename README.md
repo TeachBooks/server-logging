@@ -15,37 +15,37 @@ In brief, this is how the following components work:
 
 # Running server-logging setup locally
 
-Before running the docker containers locally, you have to populate the the directory `nginx/logs` with the log files.
+1. clone this repository
+
+2. Before running the docker containers locally, you have to populate the the directory `nginx/logs` with the log files.
 
 The log files for the `mude.citg.tudelft.nl` server are located at the directory `/var/log/nginx`. This directory contains the following files:
 
-1. access.log.*
-2. access.log.gz.*
+    i. access.log.*
+    ii. access.log.gz.*
+
+IMPORTANT: The setup doesnot ingest compressed files for example access.log.gz.1 cannot be ingested but access.log.1 can be ingested. Hence, compressed files needs to be de-compressed.
 
 Below is a description of how to run the ELK stack tool locally and start visualising the logs.
 
-1. clone the repository
-
-2. initialize the Elasticsearch users and groups required by docker-elk by executing the following command:
+3. initialize the Elasticsearch users and groups required by docker-elk by executing the following command:
 ```
 docker compose -f elk-compose.yml up setup
 ```
 
-3. If everything went well and the setup completed without error, start the other stack components:
+4. If everything went well and the setup completed without error, start the other stack components:
 ```
 docker compose -f elk-compose.yml -f extensions/filebeat/filebeat-compose.yml up -d
 ```
 
-4. access the kibana visualization tool at localhost:5601
+5. access the kibana visualization tool at localhost:5601
 
-5. to stop all the containers:
+to stop all the containers:
 ```
 docker compose -f elk-compose.yml -f extensions/filebeat/filebeat-compose.yml down
 ```
 
 # Deployment issue
-The same setup needs to be deployed on mude-utilities.citg.tudelft.nl server.
-
 The same setup is deployed on the mude-utilities.citg.tudelft.nl server at home/elk-server-logging.
 
 The mude-utilities.citg.tudelft.nl has an nginx reverse proxy running as a docker container.
